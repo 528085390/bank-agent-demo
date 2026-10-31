@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <title>账单详细报告</title>
+    <style>
+        body { font-family: -apple-system, "Segoe UI", Arial, sans-serif; background: #f7f4ef; padding: 20px; color: #1f2421; }
+        .container { max-width: 600px; margin: 0 auto; background: #fff; border-radius: 8px; overflow: hidden; box-shadow: 0 2px 8px rgba(0,0,0,0.1); }
+        .header { background: #2f4b3c; color: #fff; padding: 30px 20px; text-align: center; }
+        .header h1 { margin: 0; font-size: 24px; font-weight: 500; }
+        .content { padding: 30px 20px; }
+        table { width: 100%; border-collapse: collapse; margin-top: 20px; font-size: 14px; }
+        th, td { text-align: left; padding: 10px 8px; border-bottom: 1px solid #e7e1d7; }
+        th { color: #5c635d; font-weight: 500; }
+        td.amount { text-align: right; font-variant-numeric: tabular-nums; }
+        .total-row td { border-bottom: none; font-weight: 500; }
+        .footer { text-align: center; padding: 20px; color: #5c635d; font-size: 12px; background: #fbf9f5; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header"><h1>🧾 账单详细报告</h1></div>
+        <div class="content">
+            <p>您好，</p>
+            <p>以下是您{% if period %}<strong>{{ period }}</strong>{% elif period_start %}<strong>{{ period_start }} 至 {{ period_end }}</strong>{% endif %}的账单明细报告：</p>
+            <table>
+                <tr><th>支出分类</th><th class="amount">金额</th><th class="amount">笔数</th></tr>
+                {% for cat in categories %}
+                <tr><td>{{ cat.category }}</td><td class="amount">¥{{ cat.amount }}</td><td class="amount">{{ cat.count }}</td></tr>
+                {% endfor %}
+                <tr class="total-row">
+                    <td>总支出</td><td class="amount">¥{{ debit_total }}</td><td class="amount">{{ record_count }}</td>
+                </tr>
+            </table>
+            <p style="margin-top: 20px;">完整明细请查看随附的 PDF / Excel 附件。</p>
+        </div>
+        <div class="footer">
+            <p>此邮件由银行AI智能体自动发送，请勿回复。</p>
+            <p>© 2026 AI Banking Agent</p>
+        </div>
+    </div>
+</body>
+</html>

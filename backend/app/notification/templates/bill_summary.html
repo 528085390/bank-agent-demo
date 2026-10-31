@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>账单分析摘要</title>
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+            background-color: #f7f4ef;
+            margin: 0;
+            padding: 20px;
+            color: #1f2421;
+        }
+        .container {
+            max-width: 600px;
+            margin: 0 auto;
+            background-color: #ffffff;
+            border-radius: 8px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+            overflow: hidden;
+        }
+        .header {
+            background-color: #c4612f;
+            color: white;
+            padding: 30px 20px;
+            text-align: center;
+        }
+        .header h1 {
+            margin: 0;
+            font-size: 24px;
+            font-weight: 500;
+        }
+        .content {
+            padding: 30px 20px;
+        }
+        .summary-card {
+            background-color: #fbf9f5;
+            border-radius: 8px;
+            padding: 20px;
+            margin-bottom: 20px;
+            border-left: 4px solid #c4612f;
+        }
+        .summary-item {
+            display: flex;
+            justify-content: space-between;
+            padding: 10px 0;
+            border-bottom: 1px solid #e7e1d7;
+        }
+        .summary-item:last-child {
+            border-bottom: none;
+        }
+        .label {
+            color: #5c635d;
+            font-size: 14px;
+        }
+        .value {
+            font-size: 16px;
+            font-weight: 500;
+            color: #1f2421;
+        }
+        .value.positive {
+            color: #27ae60;
+        }
+        .value.negative {
+            color: #c4612f;
+        }
+        .category-list {
+            margin-top: 20px;
+        }
+        .category-item {
+            display: flex;
+            justify-content: space-between;
+            padding: 8px 0;
+            font-size: 14px;
+            border-bottom: 1px solid #f0ece3;
+        }
+        .footer {
+            text-align: center;
+            padding: 20px;
+            color: #5c635d;
+            font-size: 12px;
+            background-color: #fbf9f5;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>📊 账单分析摘要</h1>
+        </div>
+        <div class="content">
+            <p>您好，</p>
+            <p>您的账单分析已完成{% if period %}，统计周期 <strong>{{ period }}</strong>{% elif period_start %}，统计周期 <strong>{{ period_start }} 至 {{ period_end }}</strong>{% endif %}。</p>
+
+            <div class="summary-card">
+                <div class="summary-item">
+                    <span class="label">总收入</span>
+                    <span class="value positive">+¥{{ credit_total }}</span>
+                </div>
+                <div class="summary-item">
+                    <span class="label">总支出</span>
+                    <span class="value negative">-¥{{ debit_total }}</span>
+                </div>
+                <div class="summary-item">
+                    <span class="label">净额</span>
+                    <span class="value">¥{{ net_total }}</span>
+                </div>
+                <div class="summary-item">
+                    <span class="label">交易笔数</span>
+                    <span class="value">{{ record_count }} 笔</span>
+                </div>
+            </div>
+
+            <h3>支出分类统计</h3>
+            <div class="category-list">
+                {% for cat in categories %}
+                <div class="category-item">
+                    <span>{{ cat.category }}</span>
+                    <span><strong>¥{{ cat.amount }}</strong>{% if cat.count %}（{{ cat.count }}笔）{% endif %}</span>
+                </div>
+                {% endfor %}
+            </div>
+
+            {% if quality_issues %}
+            <div style="margin-top: 20px; padding: 15px; background-color: #fff3cd; border-radius: 8px; border-left: 4px solid #ffc107;">
+                <p style="margin: 0; color: #856404;"><strong>⚠️ 数据质量提示</strong></p>
+                <ul style="margin: 10px 0 0 0; padding-left: 20px; color: #856404;">
+                    {% for issue in quality_issues %}
+                    <li>{{ issue }}</li>
+                    {% endfor %}
+                </ul>
+            </div>
+            {% endif %}
+        </div>
+        <div class="footer">
+            <p>此邮件由银行AI智能体自动发送，请勿回复。</p>
+            <p>© 2026 AI Banking Agent</p>
+        </div>
+    </div>
+</body>
+</html>

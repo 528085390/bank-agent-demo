@@ -1,0 +1,37 @@
+# 只作用于 deploy/Dockerfile（BuildKit 的 Dockerfile 专属 ignore 文件），
+# 这样仓库根不必再多一个 .dockerignore。
+#
+# 必须排除的是两类东西：
+#   1. 宿主机的 .venv / node_modules —— 里面是 Windows 的绝对路径，COPY 进镜像会直接毁掉
+#      容器里的 .venv，而且体积上百 MB；
+#   2. 本机运行态与不入库的目录 —— 服务器上根本不存在，排除后构建上下文只有几 MB。
+**/.venv
+**/node_modules
+**/__pycache__
+**/*.py[cod]
+**/*.egg-info
+**/.pytest_cache
+**/.ruff_cache
+**/dist
+**/*.log
+**/.env.bak
+**/.env.local-backup
+
+.git
+.github
+data
+logs
+.tmp
+.runtime
+.worktrees
+_archive
+_probe
+_e2e
+_accept
+_scratch
+# docs/ 不能整体排除：alembic 的 0001_billing_baseline 会读 docs/contracts/sql/001_init.sql，
+# 少了它迁移直接 FileNotFoundError。只排掉大而无用的三块（合计约 4.7 MB）。
+docs/architecture-map
+docs/superpowers
+docs/wealth
+frontend/.e2e

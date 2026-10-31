@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <title>异常交易提醒</title>
+    <style>
+        body { font-family: -apple-system, "Segoe UI", Arial, sans-serif; background: #f7f4ef; padding: 20px; color: #1f2421; }
+        .container { max-width: 600px; margin: 0 auto; background: #fff; border-radius: 8px; overflow: hidden; box-shadow: 0 2px 8px rgba(0,0,0,0.1); }
+        .header { background: #b02a2a; color: #fff; padding: 30px 20px; text-align: center; }
+        .header h1 { margin: 0; font-size: 22px; font-weight: 500; }
+        .content { padding: 30px 20px; }
+        .alert { border-left: 4px solid #b02a2a; background: #fdf2f2; border-radius: 6px; padding: 14px; margin-bottom: 12px; }
+        .alert p { margin: 4px 0; }
+        .footer { text-align: center; padding: 20px; color: #5c635d; font-size: 12px; background: #fbf9f5; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header"><h1>⚠️ 账单异常交易提醒</h1></div>
+        <div class="content">
+            <p>您好，</p>
+            <p>我们在您的账单中发现以下需要留意的交易：</p>
+            {% for alert in alerts %}
+            <div class="alert">
+                <p><strong>{{ alert.title }}</strong></p>
+                <p>{{ alert.description }}</p>
+            </div>
+            {% endfor %}
+            <p>若以上交易并非本人操作，请尽快登录银行核实。</p>
+        </div>
+        <div class="footer">
+            <p>此邮件由银行AI智能体自动发送，请勿回复。</p>
+            <p>© 2026 AI Banking Agent</p>
+        </div>
+    </div>
+</body>
+</html>

@@ -1,0 +1,43 @@
+/data/
+/.idea
+# Local env files may hold the model API key. The pattern is deliberately unanchored so it
+# covers backend/.env as well as a root .env; only the `*.env.example` templates are committed.
+.env
+# Backup copies of the same file hold the same key, so they are ignored too -- except the
+# committed templates.
+.env.*
+!.env.example
+# Local model credentials must never be committed.
+/key.txt
+# Cloud database credentials contain a plaintext password: never commit the real file.
+# The committed template is database.local.txt.example (for local Docker); the four-line
+# format for a self-hosted instance is documented in 部署说明.md §3.1 / §6.
+/database.txt
+# The local PostgreSQL credentials describe one developer's machine (see pytest-local.ps1
+# and start.ps1 -Database local), so they are never committed either.
+/database.local.txt
+**/.venv/
+**/__pycache__/
+**/.pytest_cache/
+**/.ruff_cache/
+**/node_modules/
+**/dist/
+*.log
+# 一键启动脚本的日志与 PID 记录，属于本机运行状态。
+/logs/
+/artifacts/
+/.runtime/
+/.tmp/
+__pycache__/
+*.py[cod]
+*.egg-info/
+# Isolated git worktrees live here; they are scratch space, never committed.
+/.worktrees/
+# The manual end-to-end screenshot harness: its input is a conversation captured from a
+# running stack and its output is a generated page, so neither is committed. The evidence it
+# produces is copied into docs/wealth/.
+/frontend/.e2e/
+# 飞书扫码临时二维码图片与测试缓存
+feishu_qr.png
+**/feishu_qr.png
+**/pytest-of-*/

@@ -1,0 +1,23 @@
+# 双击入口必须是 CRLF：cmd 在 chcp 65001 之后按字节偏移继续读批处理文件，
+# 中文 .bat 若是 LF 结尾，后续命令会解析错位（实测报 'ass' is not recognized）。
+# 这个属性让任何 clone 都按 CRLF 检出，不受 core.autocrlf 影响。
+*.bat text eol=crlf
+
+# 服务器上的脚本与配置必须是 LF：Windows 上 core.autocrlf=true 时，git archive 会按检出规则
+# 把文本文件转成 CRLF，到了 Linux 就是 "set: pipefail: invalid option name" 这类错。
+# 显式钉死 LF，本机打包、CI 打包、clone 三条路都一致。
+*.sh          text eol=lf
+*.yml         text eol=lf
+*.yaml        text eol=lf
+*.conf        text eol=lf
+Dockerfile    text eol=lf
+*.dockerignore text eol=lf
+*.md          text eol=lf
+*.py          text eol=lf
+*.toml        text eol=lf
+
+# 字体是二进制：任何换行转换都会毁掉字形表。内置的 Noto Sans SC 就在
+# backend/app/notification/fonts/ 下，靠这条规则保证 clone / archive 原样传递。
+*.ttf binary
+*.ttc binary
+*.otf binary

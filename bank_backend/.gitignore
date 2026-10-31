@@ -1,0 +1,11 @@
+# 本地运行产物不得提交。数据库凭据不在这里：仓库根目录的 database.txt 已提交，
+# 本项目与主项目共用它，克隆后无需配置。
+.env
+.venv/
+__pycache__/
+*.py[cod]
+*.egg-info/
+.pytest_cache/
+.ruff_cache/
+.coverage
+htmlcov/

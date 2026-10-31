@@ -1,0 +1,186 @@
+:root{font-family:Inter,"Segoe UI","Microsoft YaHei",sans-serif;color:#24312b;background:#f3f5f4;font-synthesis:none;letter-spacing:0;font-size:14px;line-height:1.5}
+*{box-sizing:border-box}body{margin:0}button,input,select,textarea{font:inherit;letter-spacing:0}button{cursor:pointer;display:inline-flex;align-items:center;justify-content:center;gap:7px;border:0;background:transparent;color:inherit;transition:background .15s}button:disabled{opacity:.45;cursor:not-allowed}button:focus-visible,input:focus-visible,textarea:focus-visible,select:focus-visible,summary:focus-visible{outline:2px solid #287b60;outline-offset:3px}h1,h2,h3,p{margin:0}h1,h2{font-size:16px;font-weight:650}h3{font-size:14px}svg{flex-shrink:0}button:hover:not(:disabled){background:#e7eeea}button.primary:hover:not(:disabled),button.send-button:hover:not(:disabled){background:#0f5037}
+.workspace{max-width:1500px;margin:0 auto;padding:0 32px}.topbar{height:88px;display:flex;align-items:center;gap:30px;border-bottom:1px solid #dce2de}.brand{display:flex;align-items:center;gap:12px}.brand-mark{display:grid;place-items:center;width:40px;height:40px;color:#fff;background:#176649;border-radius:6px}.brand strong{font-size:19px;display:block}.brand-caption{color:#7d8680;font-size:11px;display:block}.top-status{margin-left:auto;display:flex;gap:8px;align-items:center;font-size:12px;color:#66746b}.divider{height:16px;width:1px;background:#d7dfd9;margin:0 10px}.status-dot{width:6px;height:6px;background:#ba7975;border-radius:50%}.status-dot.online{background:#2e8763}.user{display:flex;gap:7px;font-size:12px;color:#526157}.main-grid{display:grid;grid-template-columns:minmax(320px,1.1fr) minmax(360px,1fr);margin-top:24px;background:#fff;border:1px solid #dce2de;min-height:660px;height:calc(100dvh - 166px);max-height:1060px}.chat-pane,.work-pane{display:flex;flex-direction:column;min-width:0;min-height:0}.chat-pane{border-right:1px solid #e1e7e3}.pane-title{height:65px;flex-shrink:0;padding:0 24px;display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid #e9edeb}.title-with-icon{display:flex;gap:9px;align-items:center}.title-with-icon>svg{color:#6d7e74}.status-label{font-size:11px;color:#176649;padding:3px 7px;background:#ecf5ee;border-radius:4px}.status-label.muted{color:#836627;background:#fbf6e7}.conversation{flex:1;overflow-y:auto;padding:28px 24px;min-height:170px}.conversation-empty{height:100%;min-height:200px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:12px}.conversation-empty h2{font-size:21px}.conversation-empty p{color:#929b95;font-size:13px}.empty-mark{color:#709481;margin-bottom:4px}.conversation-empty .primary{margin-top:8px}.chat-message{margin-bottom:24px;max-width:90%;overflow-wrap:anywhere}.message-role{display:block;font-size:11px;color:#77897c;margin-bottom:7px}.chat-message p{white-space:pre-wrap;line-height:1.9}.chat-message.user{display:block;margin-left:auto;text-align:right}.chat-message.user p{display:inline-block;background:#eff4f1;padding:12px 16px;border-radius:6px;text-align:left}.pending{display:flex;gap:8px;font-size:12px;color:#708079}.composer{margin:0 24px 24px;border:1px solid #d7e1da;border-radius:6px;background:#fff}.composer:focus-within{border-color:#70a68b}.composer textarea{width:100%;padding:16px;resize:vertical;min-height:74px;max-height:180px;border:0;background:transparent;outline:none!important;box-shadow:none}.composer textarea::placeholder{color:#a0aaa3}.composer-bottom{display:flex;align-items:center;justify-content:space-between;padding:0 12px 12px}.composer-bottom>span{display:flex;align-items:center;gap:5px;color:#8c9990;font-size:11px}
+/* 回车发送的提示：贴在发送按钮左边，不抢状态文案的位置。 */
+.composer-keys{margin-left:auto;margin-right:10px;color:#a8b3ac;font-size:10.5px;white-space:nowrap}.send-button{width:34px;height:34px;border-radius:5px;background:#176649;color:white}.primary{padding:9px 16px;background:#176649;color:white;border-radius:5px;font-weight:550;min-height:37px}.secondary{padding:7px 11px;border:1px solid #dce3de;border-radius:5px;font-size:12px;background:#fff;min-height:34px}.icon-button{width:32px;height:32px;border-radius:4px;flex-shrink:0;color:#6a7b71}.task-selector{padding:16px 24px;display:flex;align-items:center;gap:14px}.task-selector label{font-size:12px;color:#7a867e;white-space:nowrap}.task-selector select{min-width:0;width:100%;height:34px;border:1px solid #dfe6e1;border-radius:4px;padding:0 9px;background:#fff;font-size:12px;color:#56665b}.task-content{flex:1;overflow-y:auto;padding:24px;min-height:170px}.empty-state{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:12px;color:#96a198;font-size:13px;min-height:180px;height:100%}.empty-state>svg{color:#b7c5bb}.task-heading{display:flex;justify-content:space-between;gap:12px;margin-bottom:23px}.task-heading strong{font-size:13px}.task-heading>span{font-size:11px;color:#8d978f}.steps{padding:0;margin:0;list-style:none}.step{display:flex;gap:12px;position:relative;padding-bottom:24px}.step:not(:last-child)::before{content:"";position:absolute;width:1px;background:#dce5df;top:29px;bottom:4px;left:13px}.step-index{flex:0 0 28px;width:28px;height:28px;display:grid;place-items:center;border-radius:50%;background:#f1f4f2;color:#7d8b82;font-size:12px}.succeeded .step-index{background:#e5f3e9;color:#288354}.step-body{flex:1;min-width:0;padding-top:3px}.step-heading{display:flex;align-items:baseline;justify-content:space-between;gap:10px}.step-heading strong{font-size:13px;overflow-wrap:anywhere}.step-heading>span{font-size:11px;color:#7e8f82;white-space:nowrap}.step-dependencies{font-size:11px;color:#9aa59d;margin-top:5px}.fact-label{font-size:11px;color:#247048}.step details{margin-top:8px}.step summary,.history summary{font-size:12px;color:#6c7e72;cursor:pointer}pre{font-size:11px;font-family:Consolas,monospace;white-space:pre-wrap;overflow-wrap:anywhere;background:#f5f7f5;color:#607066;padding:12px;line-height:1.7;border-radius:3px;max-width:100%;overflow:auto}.history{border-top:1px solid #e7eae8;padding-top:16px}.history-item{font-size:11px;color:#7d8b82;padding:6px 0}.task-actions{display:flex;gap:8px;padding:12px 24px;flex-wrap:wrap}.danger{color:#a2514b}.error-banner{margin-top:15px;border:1px solid #eaccc8;background:#fff3f1;color:#aa514b;padding:11px 14px;display:flex;align-items:center;justify-content:space-between;gap:14px;border-radius:4px;font-size:12px;overflow-wrap:anywhere}.error-banner small{display:block;opacity:.7;font-size:10px;margin-top:3px}footer{height:50px;display:flex;justify-content:space-between;align-items:center;gap:20px;color:#94a197;font-size:10px}.spin{animation:spin 1s linear infinite}@keyframes spin{to{transform:rotate(360deg)}}
+@media(min-width:1600px){.workspace{padding:0 48px}.main-grid{margin-top:32px;height:calc(100dvh - 185px)}}
+@media(max-width:900px){.workspace{padding:0 18px}.main-grid{grid-template-columns:minmax(280px,1fr) minmax(330px,1fr)}.topbar{height:75px;gap:15px}.top-status .divider,.top-status>svg,.top-status>span:last-child{display:none}.pane-title,.task-selector{padding-left:18px;padding-right:18px}.conversation,.task-content{padding:20px 18px}.composer{margin:0 18px 18px}}
+@media(max-width:700px){.workspace{padding:0 12px}.topbar{height:70px;gap:10px}.brand strong{font-size:16px}.brand-mark{width:34px;height:34px}.brand-caption{font-size:10px}.top-status{display:none}.user{margin-left:auto;font-size:11px}.main-grid{display:flex;flex-direction:column;height:auto;max-height:none;margin-top:14px;min-height:0}.chat-pane{border-right:0;border-bottom:1px solid #dce2de;height:460px}.pane-title{height:56px}.conversation{min-height:0}.conversation-empty{min-height:160px}.conversation-empty h2{font-size:18px}.work-pane{min-height:460px}.task-content{min-height:200px;max-height:600px;flex:auto}.clock-heading{flex-wrap:wrap;gap:5px}.clock-actions{flex-wrap:wrap}.clock-actions input{flex:1 1 165px}.task-selector{padding-top:14px;padding-bottom:12px}footer{height:50px;gap:12px;font-size:9px;align-items:center}.chat-message{max-width:95%}.error-banner{margin-top:10px}}
+@media(prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
+.settings-overlay{position:fixed;inset:0;z-index:20;background:rgba(25,37,30,.34);display:grid;place-items:center;padding:24px}
+.settings-panel{width:min(560px,100%);max-height:calc(100dvh - 48px);overflow:auto;background:#fff;border:1px solid #d8e1db;border-radius:7px;box-shadow:0 18px 60px rgba(28,48,37,.18)}
+.settings-panel>header{height:66px;padding:0 22px;display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid #e6ebe7}
+.settings-panel>header>div{display:flex;align-items:center;gap:10px}
+.settings-panel form{padding:22px;display:flex;flex-direction:column;gap:16px}
+.settings-panel label{display:flex;flex-direction:column;gap:7px;font-size:12px;color:#65746a}
+.settings-panel input,.settings-panel select{width:100%;height:38px;border:1px solid #d8e1db;border-radius:4px;background:#fff;padding:0 10px;color:#2e3c34;outline:none}
+.settings-panel input:focus,.settings-panel select:focus{border-color:#70a68b}
+.settings-row{display:grid;grid-template-columns:1.35fr .65fr;gap:12px}
+.settings-panel form>footer{display:grid;grid-template-columns:auto 1fr auto auto;gap:9px;align-items:center;padding-top:4px;height:auto;color:inherit;font-size:inherit}
+.settings-message{padding:10px 12px;border-radius:4px;font-size:12px;overflow-wrap:anywhere}
+.settings-message.error{background:#fff3f1;color:#a64c47;border:1px solid #eaccc8}
+.settings-message.success{background:#eef7f0;color:#25704d;border:1px solid #cfe3d5}
+@media(max-width:700px){.settings-overlay{padding:12px}.settings-panel{max-height:calc(100dvh - 24px)}.settings-row{grid-template-columns:1fr}.settings-panel form>footer{grid-template-columns:1fr 1fr}.settings-panel form>footer>span{display:none}.settings-panel form>footer button{width:100%}}
+/* The task workbench pane is gone, so the chat pane owns the whole grid. */
+.main-grid.single-pane{grid-template-columns:minmax(0,1fr)}
+.main-grid.single-pane .chat-pane{border-right:0}
+@media(max-width:700px){.main-grid.single-pane .chat-pane{border-bottom:0;height:min(80dvh,780px)}}
+/* Per-turn agent activity. */
+.activity{margin:0 0 20px;border-left:2px solid #e3eae5;padding:2px 0 2px 14px;display:flex;flex-direction:column;gap:7px}
+.activity-item{display:flex;align-items:center;flex-wrap:wrap;gap:7px;font-size:12px;color:#5d6d63;min-width:0}
+.activity-chip{display:inline-flex;align-items:center;gap:6px;padding:3px 9px;border-radius:11px;background:#ecf5ee;color:#1d6a4a;font-size:11px}
+.activity-label{color:#93a099;font-size:11px}
+.activity-tool{font-weight:600;color:#3c4f44}
+.activity-json{font-family:Consolas,monospace;font-size:11px;background:#f5f7f5;color:#607066;padding:3px 7px;border-radius:3px;max-width:100%;overflow-wrap:anywhere}
+.activity-json.failed{background:#fff3f1;color:#a2514b}
+.activity-status{font-size:11px;color:#25704d;background:#eef7f0;padding:2px 7px;border-radius:3px}
+.activity-status.failed{color:#a2514b;background:#fff3f1}
+.activity-summary{color:#5d6d63;overflow-wrap:anywhere}
+.activity-narration{color:#5d6d63;font-style:italic;overflow-wrap:anywhere}
+/* A tool result renders its summary plus any text blocks the module produced -- never the raw
+   envelope. Full-width flex item so the lines sit under the status pill rather than beside it,
+   and margin:0 because the UA paragraph margins double-space the block lines inside the row.
+   overflow-wrap mirrors .activity-json: a long unbroken summary must not overflow the card. */
+.activity-result{flex:1 1 100%;min-width:0;display:flex;flex-direction:column;gap:3px}
+.result-summary,.block-text{margin:0;max-width:100%;overflow-wrap:anywhere;line-height:1.7}
+.result-summary{color:#5d6d63}
+.block-text{color:#7a867e}
+/* Inline card shown while a turn waits for the user. */
+.interrupt-card{margin:0 0 24px;max-width:90%;border:1px solid #e6d9b8;background:#fffdf5;border-radius:6px;padding:16px 18px;display:flex;flex-direction:column;gap:12px}
+.interrupt-prompt{font-size:13px;color:#6b5520;line-height:1.7}
+.interrupt-field{display:flex;flex-direction:column;gap:6px;font-size:12px;color:#7a867e}
+.interrupt-field input{height:36px;border:1px solid #e0dbc9;border-radius:4px;background:#fff;padding:0 10px;color:#2e3c34;outline:none}
+.interrupt-field input:focus{border-color:#c9a94f}
+.interrupt-actions{display:flex;justify-content:flex-end;gap:9px}
+/* Business IDs attached to the final reply. */
+.business-ids{display:flex;align-items:center;flex-wrap:wrap;gap:7px;margin-top:10px}
+.business-label{font-size:11px;color:#8c9990}
+.business-id{font-family:Consolas,monospace;font-size:11px;background:#eef3f0;color:#2f6b4f;padding:3px 8px;border-radius:3px}
+/* The clock under one message and the day on a conversation row. Both read the browser's own
+   time zone, and a stamp that could not be read renders nothing at all. */
+.message-time{font-size:11px;color:#8c9990;margin-top:6px;font-variant-numeric:tabular-nums}
+.message-time:empty{display:none}
+.conversation-stamp{flex-shrink:0;font-size:11px;color:#8c9990;font-variant-numeric:tabular-nums}
+/* Conversation sidebar: the list, its per-row actions and the two markers a row can carry.
+   The grid keeps the chat pane first in reading order and lets the sidebar own a fixed column. */
+.main-grid.with-sidebar{grid-template-columns:minmax(230px,280px) minmax(0,1fr)}
+.conversation-sidebar{display:flex;flex-direction:column;min-width:0;min-height:0;border-right:1px solid #e1e7e3;background:#fbfcfb}
+.sidebar-head{height:65px;flex-shrink:0;padding:0 10px 0 18px;display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid #e9edeb}
+.sidebar-head h2{font-size:14px}
+/* One toggle per server filter flag: `archived` and `deleted` are independent, so each switch
+   reveals exactly its own kind of conversation and both are reachable at once. */
+.sidebar-filters{display:flex;flex-wrap:wrap;gap:4px 14px;padding:10px 18px 6px}
+.sidebar-toggle{display:flex;align-items:center;gap:7px;font-size:11px;color:#7a867e;cursor:pointer;white-space:nowrap}
+.sidebar-toggle input{width:13px;height:13px;accent-color:#176649;cursor:pointer}
+.conversation-list{flex:1;min-height:0;overflow-y:auto;padding:4px 10px 14px;display:flex;flex-direction:column;gap:2px}
+.sidebar-empty{padding:14px 8px;font-size:12px;color:#929b95;line-height:1.7}
+.conversation-item{border-radius:5px}
+.conversation-item:hover{background:#f1f5f2}
+.conversation-item.active{background:#eaf3ed}
+.conversation-row{display:flex;align-items:center;gap:6px;min-height:34px;padding:0 4px 0 10px;cursor:pointer;min-width:0}
+.conversation-title{flex:1;min-width:0;font-size:12.5px;color:#3c4f44;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.conversation-serial{flex-shrink:0;font-size:11px;color:#8c9990;font-variant-numeric:tabular-nums;font-family:ui-monospace,SFMono-Regular,Menlo,monospace}
+.conversation-marks{display:flex;align-items:center;gap:5px;flex-shrink:0;color:#8c9990}
+.conversation-marks .mark{font-size:10px;padding:2px 5px;border-radius:3px;background:#fbf6e7;color:#836627}
+.conversation-marks .mark.deleted{background:#fff3f1;color:#a2514b}
+.conversation-actions{display:flex;gap:1px;padding:0 4px 4px 10px}
+.conversation-actions .icon-button{width:26px;height:26px;color:#93a099}
+.rename-input{flex:1;min-width:0;height:26px;border:1px solid #cfe0d6;border-radius:4px;padding:0 6px;font-size:12.5px;color:#2e3c34;outline:none}
+.load-more{margin:8px 4px 0}
+/* 批量删除工具条：全选 + 删除选中 + 全删，三件一组，放在过滤条下方。 */
+.sidebar-select{display:flex;align-items:center;flex-wrap:wrap;gap:4px 6px;padding:7px 18px;border-bottom:1px solid #eef2f0}
+.sidebar-select .secondary{font-size:11px;padding:3px 9px;min-height:26px;border-radius:4px}
+.sidebar-select .secondary:disabled{opacity:.5;cursor:not-allowed}
+.sidebar-select .secondary.danger{color:#a2514b;border-color:#e8c9c5}
+.sidebar-select .secondary.danger:hover:not(:disabled){background:#fbeae8;border-color:#d9a8a2}
+.conversation-item.selected{background:#f6f0ef}
+.conversation-item.selected:hover{background:#f1e6e4}
+.conversation-check{flex-shrink:0;width:14px;height:14px;accent-color:#176649;cursor:pointer}
+.history-more{display:flex;justify-content:center;margin-bottom:18px}
+/* "结果未确认": the request was submitted but no assistant reply is confirmed. Never a failure,
+   never a success -- and the recovery banner carries the only action that is safe. */
+.unconfirmed{display:flex;align-items:center;gap:7px;flex-wrap:wrap;margin:0 0 22px;padding:9px 12px;border:1px solid #e6d9b8;background:#fffdf5;color:#6b5520;border-radius:5px;font-size:12px;line-height:1.7}
+.unconfirmed.blocked{justify-content:space-between}
+/* "回复未完整生成": the turn ended for a reason the server named. The answer that arrived is
+   real, so the notice sits beside it rather than replacing it. */
+.reply-notice{display:flex;align-items:center;gap:7px;flex-wrap:wrap;margin:0 0 22px;padding:9px 12px;border:1px solid #e6d9b8;background:#fffdf5;color:#6b5520;border-radius:5px;font-size:12px;line-height:1.7}
+@media(max-width:900px){.main-grid.with-sidebar{grid-template-columns:minmax(180px,215px) minmax(0,1fr)}}
+@media(max-width:700px){.conversation-sidebar{border-right:0;border-bottom:1px solid #dce2de}.conversation-list{max-height:170px}}
+/* 助理的回复是 Markdown：这里只给它基本的块级样式，避免浏览器默认样式把标题撑得过大。 */
+.markdown-body{font-size:13px;line-height:1.9;color:#2e3c34;overflow-wrap:anywhere}
+.markdown-body>*:first-child{margin-top:0}
+.markdown-body>*:last-child{margin-bottom:0}
+.markdown-body p{margin:0 0 10px;white-space:pre-wrap}
+.markdown-body h1,.markdown-body h2,.markdown-body h3,.markdown-body h4,.markdown-body h5,.markdown-body h6{margin:16px 0 8px;line-height:1.5;font-weight:600}
+.markdown-body h1{font-size:17px}.markdown-body h2{font-size:16px}.markdown-body h3{font-size:15px}
+.markdown-body h4,.markdown-body h5,.markdown-body h6{font-size:13.5px}
+.markdown-body ul,.markdown-body ol{margin:0 0 10px;padding-left:22px}
+.markdown-body li{margin:2px 0}
+.markdown-body blockquote{margin:0 0 10px;padding:2px 0 2px 12px;border-left:3px solid #d7e1da;color:#5c6b62}
+.markdown-body a{color:#176649;text-decoration:underline;text-underline-offset:2px}
+.markdown-body code{font-family:Consolas,monospace;font-size:12px;background:#eef3f0;color:#2f6b4f;padding:1px 5px;border-radius:3px}
+.markdown-body pre{margin:0 0 10px;padding:12px 14px;background:#f4f7f5;border:1px solid #e1e7e3;border-radius:5px;overflow-x:auto}
+.markdown-body pre code{background:none;color:#2e3c34;padding:0;font-size:12px;line-height:1.7}
+.markdown-body table{margin:0 0 10px;border-collapse:collapse;width:100%;font-size:12.5px}
+.markdown-body th,.markdown-body td{border:1px solid #e1e7e3;padding:6px 10px;text-align:left}
+.markdown-body th{background:#f4f7f5;font-weight:600}
+.markdown-body hr{margin:14px 0;border:0;border-top:1px solid #e1e7e3}
+/* 待确认操作：卡片里显示的就是用户点击确认的那一笔。 */
+.confirmation{display:flex;flex-direction:column;gap:10px;border:1px solid #e0dbc9;background:#fff;border-radius:5px;padding:12px 14px}
+.confirmation-head{display:flex;align-items:baseline;justify-content:space-between;gap:12px}
+.confirmation-title{font-size:13px;font-weight:600;color:#3c4f44}
+.confirmation-amount{font-size:17px;font-weight:600;color:#176649}
+.confirmation-details{display:flex;flex-wrap:wrap;gap:6px 24px;margin:0}
+.confirmation-details>div{display:flex;gap:8px;font-size:12px}
+.confirmation-details dt{color:#8c9990}
+.confirmation-details dd{margin:0;color:#2e3c34}
+/* 结果未知：既不是成功，也不是失败，而是"待核实"。 */
+.activity-status.pending{background:#fbf6e7;color:#836627}
+
+/* 上传流水卡片 + 追问卡片的选择卡 / 年月日三框 —— 与 Analyze_Bills 那份保持一致。 */
+.interrupt-date{display:flex;gap:8px}
+.interrupt-date select{flex:1;min-width:0;height:36px;border:1px solid #e0dbc9;border-radius:4px;background:#fff;padding:0 8px;color:#2e3c34;font:inherit;font-size:12px;outline:none}
+.interrupt-date select:focus{border-color:#c9a94f}
+.interrupt-choices{display:flex;flex-wrap:wrap;gap:8px}
+.interrupt-choice{font:inherit;font-size:12px;padding:8px 14px;border:1px solid #e0dbc9;border-radius:4px;background:#fff;color:#2e3c34;cursor:pointer;transition:border-color .15s,background .15s}
+.interrupt-choice:hover:not(:disabled){border-color:#c9a94f}
+.interrupt-choice.chosen{border-color:#c9a94f;background:#fdf6e3;color:#6b5520}
+.interrupt-choice:disabled{opacity:.6;cursor:default}
+.bill-entry{font-size:12px;color:#2f6b4f;border-color:#cfe0d5}
+.bill-card{margin:0 0 8px;border:1px solid #dce2de;background:#fbfdfc;border-radius:6px;padding:16px 18px;display:flex;flex-direction:column;gap:12px}
+.bill-head{display:flex;align-items:center;justify-content:space-between}
+.bill-head .title-with-icon{color:#176649}
+.bill-hint{font-size:13px;color:#5d6d63;line-height:1.7}
+.bill-note{font-size:11px;color:#8c9990;line-height:1.6}
+.bill-steps{margin:0;padding-left:18px;font-size:12px;color:#5d6d63;line-height:1.9}
+.bill-fields{display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:12px}
+.bill-field,.bill-fields label{display:flex;flex-direction:column;gap:6px;font-size:12px;color:#7a867e}
+.bill-field input,.bill-fields input,.bill-fields select{height:36px;border:1px solid #d8e1db;border-radius:4px;background:#fff;padding:0 10px;color:#2e3c34;outline:none}
+.bill-field input:focus,.bill-fields input:focus,.bill-fields select:focus{border-color:#70a68b}
+.bill-file-input{font-size:12px;color:#5d6d63}
+.bill-file{font-size:12px;color:#2f6b4f;font-family:Consolas,monospace;overflow-wrap:anywhere}
+.bill-actions{display:flex;align-items:center;justify-content:flex-end;gap:9px;flex-wrap:wrap}
+.bill-message{padding:10px 12px;border-radius:4px;font-size:12px;overflow-wrap:anywhere}
+.bill-message.error{background:#fff3f1;color:#a64c47;border:1px solid #eaccc8}
+.bill-progress{height:6px;background:#eef2f0;border-radius:3px;overflow:hidden}
+.bill-progress>span{display:block;height:100%;background:#2e8763;transition:width .3s}
+
+/* 设置面板里的邮箱区：与下面的模型配置分开一格。 */
+.settings-email{padding:22px 22px 18px;border-bottom:1px solid #e6ebe7}
+
+/* 设置面板的账号区：本人是谁、改密码、退出全部设备。 */
+.settings-account{padding:22px 22px 18px;border-bottom:1px solid #e6ebe7}
+.settings-account>h3,.settings-email>h3,.settings-panel form>h3{margin:0 0 14px;font-size:13px;font-weight:600;color:#24312b}
+.settings-account .account-facts{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin:0 0 18px}
+.settings-account .account-facts>div{background:#f6f8f7;border:1px solid #e6ebe7;border-radius:4px;padding:8px 10px}
+.settings-account dt{font-size:11px;color:#7d8680;margin-bottom:3px}
+.settings-account dd{margin:0;font-size:13px;color:#24312b;overflow-wrap:anywhere}
+.settings-account .account-form{padding:0;gap:12px}
+.settings-account .account-actions{display:flex;gap:9px;align-items:center;flex-wrap:wrap}
+.settings-account .account-note{font-size:11px;line-height:1.7;color:#7d8680}
+@media(max-width:700px){.settings-account .account-facts{grid-template-columns:1fr}.settings-account .account-actions button{flex:1}}
+
+/* 已结算回合里留下的分析报告：与上面的对话隔开一点。 */
+.settled-reports{margin-top:16px}
+
+.stop-button{padding:6px 12px;border:1px solid #e3c9c4;border-radius:5px;background:#fff;color:#a2514b;font-size:12px;min-height:34px;margin-right:8px}

@@ -1,0 +1,322 @@
+{
+  "schema_version": 1,
+  "diagram_type": "architecture",
+  "meta": {
+    "title": "银行 AI Agent 底座运行时架构",
+    "quality_profile": "showcase",
+    "repository": {
+      "url": "https://github.com/528085390/bank-agent",
+      "revision": "2d8bf0a734c93a1d7e3c6554fe21d4da0a47f5aa"
+    },
+    "views": [
+      {
+        "id": "primary-path",
+        "label": "主链路：一次对话",
+        "focus": ["browser", "api", "runtime", "supervisor", "domains"],
+        "note": "浏览器发一条消息，Supervisor 用真实模型决定是否委派给某个领域子图。"
+      },
+      {
+        "id": "tool-and-bank",
+        "label": "工具授权与银行边界",
+        "focus": ["domains", "gateway", "adapter", "bankclient", "bank"],
+        "note": "工具必须经过 Handle 授权、Schema 校验与身份注入；当前工具目录为空。"
+      },
+      {
+        "id": "state-and-model",
+        "label": "状态与模型依赖",
+        "focus": ["runtime", "supervisor", "checkpointer", "llm"],
+        "note": "会话状态落在 PostgreSQL checkpoint，决策来自外部模型 API。"
+      }
+    ]
+  },
+  "components": [
+    {
+      "id": "browser",
+      "type": "frontend",
+      "label": "浏览器前端",
+      "sublabel": "Vue 3 单页应用",
+      "pos": [40, 265],
+      "size": [140, 72],
+      "sources": [
+        { "path": "frontend/src/App.vue", "line": 87, "label": "chat() 事件流" },
+        { "path": "frontend/src/api.ts", "line": 48, "label": "SSE 解析" }
+      ]
+    },
+    {
+      "id": "api",
+      "type": "backend",
+      "label": "FastAPI 服务",
+      "sublabel": "app/main.py · api/routes.py",
+      "tag": "POST /api/chat/messages",
+      "pos": [280, 265],
+      "size": [140, 72],
+      "sources": [
+        { "path": "backend/app/main.py", "line": 23, "label": "create_app" },
+        { "path": "backend/app/api/routes.py", "line": 189, "label": "chat 端点" }
+      ]
+    },
+    {
+      "id": "runtime",
+      "type": "backend",
+      "label": "AgentRuntime",
+      "sublabel": "会话运行时",
+      "tag": "thread_id + 会话锁",
+      "pos": [520, 265],
+      "size": [140, 72],
+      "sources": [
+        { "path": "backend/app/agents/runtime.py", "line": 45, "label": "thread 派生" },
+        { "path": "backend/app/agents/runtime.py", "line": 103, "label": "per-session 锁" }
+      ]
+    },
+    {
+      "id": "supervisor",
+      "type": "backend",
+      "label": "Supervisor 图",
+      "sublabel": "LangGraph 编排",
+      "tag": "最多 4 次委派",
+      "pos": [760, 265],
+      "size": [140, 72],
+      "sources": [
+        { "path": "backend/app/agents/supervisor/graph.py", "line": 359, "label": "build_supervisor" },
+        { "path": "backend/app/agents/supervisor/graph.py", "line": 53, "label": "MAX_DOMAIN_TURNS" }
+      ]
+    },
+    {
+      "id": "domains",
+      "type": "backend",
+      "label": "领域子图 ×6",
+      "sublabel": "六个领域 Agent",
+      "tag": "三节点暂停流",
+      "pos": [1000, 265],
+      "size": [140, 72],
+      "sources": [
+        { "path": "backend/app/agents/supervisor/graph.py", "line": 400, "label": "build_domain_graph" },
+        { "path": "backend/app/modules/__init__.py", "line": 17, "label": "ALL_MODULES" }
+      ]
+    },
+    {
+      "id": "gateway",
+      "type": "security",
+      "label": "Tool Gateway",
+      "sublabel": "AgentToolHandle 授权边界",
+      "tag": "身份注入 + Schema 校验",
+      "pos": [520, 480],
+      "size": [140, 72],
+      "sources": [
+        { "path": "backend/app/tools/gateway.py", "line": 86, "label": "invoke" },
+        { "path": "backend/app/tools/handle.py", "line": 20, "label": "不可变 Handle" }
+      ]
+    },
+    {
+      "id": "adapter",
+      "type": "backend",
+      "label": "BankToolAdapter",
+      "sublabel": "模块 handler 注册表",
+      "tag": "当前 0 个工具",
+      "pos": [760, 480],
+      "size": [140, 72],
+      "sources": [
+        { "path": "backend/app/tools/bank_adapter.py", "line": 32, "label": "BankToolAdapter" },
+        { "path": "backend/app/modules/registry.py", "line": 38, "label": "build_registry" }
+      ]
+    },
+    {
+      "id": "bankclient",
+      "type": "backend",
+      "label": "BankClient",
+      "sublabel": "唯一银行出站口",
+      "tag": "绝不重试",
+      "pos": [1000, 480],
+      "size": [140, 72],
+      "sources": [
+        { "path": "backend/app/integration/bank_client.py", "line": 91, "label": "BankClient" }
+      ]
+    },
+    {
+      "id": "checkpointer",
+      "type": "database",
+      "label": "Checkpointer",
+      "sublabel": "PostgreSQL 会话状态",
+      "tag": "checkpoints 表",
+      "pos": [520, 55],
+      "size": [140, 72],
+      "sources": [
+        { "path": "backend/app/storage/checkpointer.py", "line": 26, "label": "LockedAsyncPostgresSaver" },
+        { "path": "backend/app/main.py", "line": 42, "label": "启动即校验表" }
+      ]
+    },
+    {
+      "id": "llm",
+      "type": "external",
+      "label": "模型服务 API",
+      "sublabel": "[OI] 兼容 /chat/completions",
+      "tag": "密钥仅存内存",
+      "pos": [1000, 55],
+      "size": [140, 72],
+      "sources": [
+        { "path": "backend/app/integration/model_client.py", "line": 99, "label": "ChatCompletionsModelClient" },
+        { "path": "backend/app/integration/llm_config.py", "line": 42, "label": "LlmConfigManager" }
+      ]
+    },
+    {
+      "id": "bank",
+      "type": "external",
+      "label": "模拟银行服务",
+      "sublabel": "bank_backend · FastAPI :8001",
+      "tag": "独立 bank_db",
+      "pos": [1240, 480],
+      "size": [140, 72],
+      "sources": [
+        { "path": "bank_backend/app/main.py", "line": 24, "label": "create_app" },
+        { "path": "backend/app/core/config.py", "line": 26, "label": "bank_backend_base_url" }
+      ]
+    },
+    {
+      "id": "notify",
+      "type": "backend",
+      "label": "邮件通知服务",
+      "sublabel": "NotificationService + Worker",
+      "tag": "SMTP / Redis 队列",
+      "pos": [340, 55],
+      "size": [140, 72],
+      "sources": [
+        { "path": "backend/app/notification/service.py", "line": 35, "label": "NotificationService" },
+        { "path": "backend/app/notification/worker_main.py", "line": 23, "label": "队列 Worker" }
+      ]
+    }
+  ],
+  "boundaries": [
+    {
+      "kind": "region",
+      "label": "Agent 服务进程",
+      "wraps": ["api", "runtime", "supervisor", "domains", "gateway", "adapter", "bankclient"]
+    },
+    {
+      "kind": "security-group",
+      "label": "工具授权边界",
+      "wraps": ["gateway", "adapter"]
+    }
+  ],
+  "connections": [
+    {
+      "id": "browser-to-api",
+      "from": "browser",
+      "to": "api",
+      "label": "SSE 流",
+      "variant": "emphasis"
+    },
+    {
+      "id": "api-to-runtime",
+      "from": "api",
+      "to": "runtime",
+      "label": "invoke()"
+    },
+    {
+      "id": "runtime-to-supervisor",
+      "from": "runtime",
+      "to": "supervisor",
+      "label": "串行推进"
+    },
+    {
+      "id": "supervisor-to-domains",
+      "from": "supervisor",
+      "to": "domains",
+      "label": "委派指令"
+    },
+    {
+      "id": "domains-to-gateway",
+      "from": "domains",
+      "to": "gateway",
+      "label": "工具调用",
+      "fromSide": "bottom",
+      "toSide": "top",
+      "via": [[1070, 410], [590, 410]]
+    },
+    {
+      "id": "gateway-to-adapter",
+      "from": "gateway",
+      "to": "adapter",
+      "label": "校验通过"
+    },
+    {
+      "id": "adapter-to-bankclient",
+      "from": "adapter",
+      "to": "bankclient",
+      "label": "按名路由"
+    },
+    {
+      "id": "bankclient-to-bank",
+      "from": "bankclient",
+      "to": "bank",
+      "label": "HTTP /api",
+      "variant": "dashed"
+    },
+    {
+      "id": "llm-to-supervisor",
+      "from": "llm",
+      "to": "supervisor",
+      "label": "模型调用",
+      "fromSide": "left",
+      "toSide": "top",
+      "via": [[830, 91]],
+      "labelAt": [830, 180]
+    },
+    {
+      "id": "llm-to-domains",
+      "from": "llm",
+      "to": "domains",
+      "label": "领域决策",
+      "fromSide": "bottom",
+      "toSide": "top",
+      "labelAt": [1070, 195]
+    },
+    {
+      "id": "runtime-to-checkpointer",
+      "from": "runtime",
+      "to": "checkpointer",
+      "label": "状态持久化"
+    },
+    {
+      "id": "api-to-notify",
+      "from": "notify",
+      "to": "api",
+      "label": "邮件发送",
+      "variant": "dashed",
+      "fromSide": "bottom",
+      "toSide": "top",
+      "labelAt": [410, 160]
+    }
+  ],
+  "cards": [
+    {
+      "dot": "cyan",
+      "title": "主链路事实",
+      "items": [
+        "thread_id 由 session_id 派生，客户端从不发送 thread id",
+        "进程内 per-session 锁串行同一会话；首期单 worker",
+        "图按调用构建，领域子图绑定调用者的 Handle",
+        "模型调用次数由结构决定：闲聊 1 次，业务委派 3 次"
+      ]
+    },
+    {
+      "dot": "rose",
+      "title": "信任边界",
+      "items": [
+        "bank_session cookie 与 body.session_id 不一致即 401",
+        "模型输出不可信：请求里的 agent 字段被完全忽略",
+        "身份在构造 Handle 时固定，模型无法构造 Handle",
+        "bank_customer_id 解析失败降级为 None，工具必须 fail closed"
+      ]
+    },
+    {
+      "dot": "amber",
+      "title": "工具网关与外部依赖",
+      "items": [
+        "ToolCatalog 当前 0 个生产工具，每个 Handle 都为空",
+        "幂等键在重试循环外铸一次并复用；call_id 每次新铸",
+        "WRITE 工具无幂等键时在任何 HTTP 之前拒绝",
+        "模型密钥仅存内存；SSE 6 个事件不持久化、不可重放"
+      ]
+    }
+  ]
+}

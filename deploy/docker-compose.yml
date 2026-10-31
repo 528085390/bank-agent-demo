@@ -1,0 +1,140 @@
+# 真机测试环境（os / demo.example.com）。
+#
+# 由 deploy/deploy.sh 调用，必须导出两个变量：
+#   STACK_DIR  运行态根目录（默认 /opt/stack/bank-agent），secrets/ data/ releases/ 都在里面
+#   TAG        当前发布的 commit 短 sha，同时是镜像 tag 和 releases 子目录名
+#
+# 手工操作（排查时）：
+#   cd /opt/stack/bank-agent
+#   STACK_DIR=/opt/stack/bank-agent TAG=$(cat state/current_tag) \
+#     docker compose -f releases/$TAG/deploy/docker-compose.yml ps
+name: bank-agent
+
+services:
+  db:
+    image: postgres:17-alpine
+    restart: always
+    environment:
+      # 保留 postgres 这个超级用户：仓库里的 init_test_database.py / init_database.py
+      # 都是连 /postgres 库再 CREATE DATABASE，账号名换成别的会让它们直接失败。
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD_FILE: /run/secrets/pg_password
+      POSTGRES_DB: postgres
+      POSTGRES_INITDB_ARGS: --encoding=UTF8
+    secrets:
+      - pg_password
+    volumes:
+      - ${STACK_DIR}/data/pgdata:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres -d postgres"]
+      interval: 5s
+      timeout: 5s
+      retries: 30
+
+  backend:
+    image: bank-agent-app:${TAG}
+    build:
+      context: ${STACK_DIR}/releases/${TAG}
+      dockerfile: deploy/Dockerfile
+      target: app
+    # 镜像一律本地构建，绝不去 registry 找：这台机器上没有凭据，也没有推送过任何镜像。
+    pull_policy: never
+    restart: always
+    depends_on:
+      db:
+        condition: service_healthy
+    environment:
+      # DATABASE_FILE 是「四行凭据文件」的开关，不是 DSN：backend 取 test 库、
+      # bank_backend 取 bank_db，一个 DSN 变量给不了两个兄弟进程两个库名。
+      DATABASE_FILE: /run/secrets/database_credentials
+      BANK_BACKEND_BASE_URL: http://bank:8001/api
+      DEMO_MODE: "true"
+      # 演示旁路默认关死：`POST /api/session` 没有凭据就发身份，多用户下等于把同一个账号
+      # （连同它的银行客户）发给所有访客。要临时开回来（单用户演示机），把它改成 "true"。
+      ALLOW_DEMO_LOGIN: "false"
+      COOKIE_SECURE: "false"
+      # 注册时领取的客户池大小，必须与 bank 侧 `scripts/seed_customer_pool.py --count` 一致。
+      BANK_POOL_SIZE: "20"
+    env_file:
+      - ${STACK_DIR}/secrets/llm.env
+      # SMTP。backend/.env 不再入库（里面有授权码和本机令牌），所以镜像里没有邮件配置，
+      # 服务器上的发信账号只能从这里注入。不填则报告发不出去，其余功能不受影响。
+      - ${STACK_DIR}/secrets/mail.env
+      # 只有服务凭证（BANK_SERVICE_TOKEN）。运维口令在另一个文件里，backend 刻意读不到：
+      # 它读得到就等于 app 进程能清空全库。
+      - ${STACK_DIR}/secrets/app_bank.env
+    secrets:
+      - database_credentials
+    volumes:
+      # 账单附件与沙箱都写在仓库根的 .tmp/ 下，不挂出来就是容器内的临时空间。
+      - ${STACK_DIR}/data/tmp:/app/.tmp
+    healthcheck:
+      test:
+        - CMD
+        - /app/backend/.venv/bin/python
+        - -c
+        - import urllib.request;urllib.request.urlopen('http://127.0.0.1:8000/api/health',timeout=3)
+      interval: 10s
+      timeout: 5s
+      retries: 40
+      # 首次启动要跑建库 + 迁移 + 种子 + checkpoint 表，给足时间。
+      start_period: 300s
+
+  bank:
+    # 与 backend 同一个镜像，只是换入口脚本：省一次 arm64 构建。
+    image: bank-agent-app:${TAG}
+    pull_policy: never
+    restart: always
+    command: ["bash", "/app/entrypoint-bank.sh"]
+    depends_on:
+      db:
+        condition: service_healthy
+      backend:
+        condition: service_started
+    environment:
+      DATABASE_FILE: /run/secrets/database_credentials
+    env_file:
+      # SERVICE_TOKEN（校验入站请求）+ OPS_TOKEN（清库/推时钟）。刻意只挂在 bank 上。
+      - ${STACK_DIR}/secrets/bank_backend.env
+    secrets:
+      - database_credentials
+    healthcheck:
+      test:
+        - CMD
+        - /app/bank_backend/.venv/bin/python
+        - -c
+        # 不能探 /api/health：bank 的 health 要求模拟状态已初始化，而种子是部署脚本
+        # 在容器起来之后才跑的，用它当健康检查会永远 unhealthy。这里只确认端口在听。
+        - import socket;socket.create_connection(('127.0.0.1',8001),3).close()
+      interval: 10s
+      timeout: 5s
+      retries: 40
+      start_period: 180s
+
+  web:
+    image: bank-agent-web:${TAG}
+    build:
+      context: ${STACK_DIR}/releases/${TAG}
+      dockerfile: deploy/Dockerfile
+      target: web
+      args:
+        # 烧进 /version.txt，用来核对线上跑的是哪一次提交。
+        GIT_SHA: ${TAG}
+    pull_policy: never
+    restart: always
+    depends_on:
+      backend:
+        condition: service_started
+    volumes:
+      # Basic Auth 口令文件，deploy.sh 在 up 之前生成，缺了 nginx 会直接起不来。
+      # 权限必须是 644：nginx worker 以 nginx 用户读它，600 会 500。
+      - ${STACK_DIR}/secrets/htpasswd:/etc/nginx/.htpasswd:ro
+    ports:
+      # 唯一对外端口。os 上 80/443/8443/2283 已被 sing-box、nginx、Immich 占着。
+      - "8088:8088"
+
+secrets:
+  pg_password:
+    file: ${STACK_DIR}/secrets/pg_password.txt
+  database_credentials:
+    file: ${STACK_DIR}/secrets/database.docker.txt
