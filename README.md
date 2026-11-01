@@ -181,7 +181,7 @@ docs/             架构、安全自评、模块说明、测试矩阵、需求�
 - [技术文档 PDF](docs/deliverables/bank-agent-tech-doc.pdf) / [DOCX](docs/deliverables/bank-agent-tech-doc.docx)
 - [安全自评报告 PDF](docs/deliverables/bank-agent-security-assessment.pdf) / [DOCX](docs/deliverables/bank-agent-security-assessment.docx)
 - [答辩 PPT](docs/deliverables/bank-agent-deck.pptx)（10 页，含讲稿）
-- [演示视频](docs/deliverables/bank-agent-demo.mp4)（2 分 21 秒，真实 UI 录屏）
+- [演示视频](docs/deliverables/bank-agent-demo.mp4)（3 分 02 秒，真实 UI 录屏）
 - 本仓库是**公开源码镜像**：已移除真实数据库凭据、SMTP 授权码、服务器地址与运维口令；启动所需的示例配置均在 `*.example` 文件中。代码、文档与作品资料与本项目 2026-11-01 最终验收版同步。
 
 ---
